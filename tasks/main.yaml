@@ -1,0 +1,48 @@
+---
+- name: Detect Puppetlabs release package
+  command: dpkg-query -W puppetlabs-release
+  register: release_package
+  changed_when: not release_package.stdout.startswith("puppetlabs-release\t")
+
+- name: Download Puppetlabs release package
+  shell: "wget http://apt.puppetlabs.com/{{ puppet_release_pkg }} -O /tmp/{{ puppet_release_pkg }} && dpkg -i /tmp/{{ puppet_release_pkg }} && rm -f /tmp/{{ puppet_release_pkg }}"
+  when: release_package.changed
+
+- name: Create config directory
+  file: path={{ conf_dir }} state=directory
+
+- name: Preconfigure puppet
+  template: src=puppet.conf.j2 dest={{ conf_dir }}/puppet.conf
+
+- name: Install packages
+  apt: name={{ item }} update_cache=true install_recommends=no
+  with_items:
+  - nginx-light
+  - puppetmaster
+  - unicorn
+
+- name: Configure rack
+  copy: src=config.ru dest={{ lib_dir }}/config.ru
+  notify: Reload unicorn
+
+- name: Configure unicorn defaults
+  template: src=unicorn.default.j2 dest=/etc/default/unicorn
+  notify: Reload unicorn
+
+- name: Configure unicorn
+  template: src=unicorn.conf.rb.j2 dest={{ unicorn_conf_file }}
+  notify: Reload unicorn
+
+- meta: flush_handlers
+
+- name: Start unicorn
+  service: name=unicorn state=started
+
+- name: Configure nginx
+  template: src=nginx_vhost.conf.j2 dest=/etc/nginx/sites-enabled/puppetmaster
+  notify: Restart nginx
+
+- meta: flush_handlers
+
+- name: Start nginx
+  service: name=nginx state=started

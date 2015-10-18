@@ -1,0 +1,13 @@
+[main]
+logdir=/var/log/puppet
+vardir=/var/lib/puppet
+ssldir=/var/lib/puppet/ssl
+rundir=/var/run/puppet
+factpath=$vardir/lib/facter
+
+[master]
+ca_name = Puppet CA: {{ puppetmaster_server_name }}
+reports = log
+
+[agent]
+server = {{ puppetmaster_server_name }}

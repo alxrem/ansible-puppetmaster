@@ -1,0 +1,12 @@
+---
+- name: Reload unicorn
+  service: name=unicorn state=reloaded
+
+- name: Restart unicorn
+  service: name=unicorn state=restarted
+
+- name: Reload nginx
+  service: name=nginx state=reloaded
+
+- name: Restart nginx
+  service: name=nginx state=restarted

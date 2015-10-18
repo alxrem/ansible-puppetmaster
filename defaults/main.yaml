@@ -1,0 +1,4 @@
+---
+puppetmaster_server_name: puppet
+unicorn_worker_processes: 2
+unicorn_timeout: 30

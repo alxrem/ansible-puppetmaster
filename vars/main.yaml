@@ -1,0 +1,10 @@
+---
+puppet_release_pkg: puppetlabs-release-wheezy.deb
+conf_dir: /etc/puppet
+lib_dir: /var/lib/puppet
+log_dir: /var/log/puppet
+run_dir: /run/puppet
+ssl_dir: "{{ lib_dir }}/ssl"
+unicorn_pidfile: "{{ run_dir }}/unicorn.pid"
+unicorn_socket: "{{ run_dir }}/unicorn.sock"
+unicorn_conf_file: "{{ conf_dir }}/unicorn.conf.rb"

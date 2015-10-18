@@ -1,0 +1,32 @@
+upstream puppetmaster {
+    server unix:{{ unicorn_socket }} fail_timeout=0;
+}
+
+server {
+    listen 0.0.0.0:8140 ssl default_server;
+
+    ssl on;
+    ssl_certificate {{ ssl_dir }}/certs/{{ ansible_fqdn }}.pem;
+    ssl_certificate_key {{ ssl_dir }}/private_keys/{{ ansible_fqdn }}.pem;
+    ssl_client_certificate {{ ssl_dir }}/certs/ca.pem;
+    ssl_crl {{ ssl_dir }}/ca/ca_crl.pem;
+    ssl_session_timeout 5m;
+    ssl_verify_client optional;
+
+    client_max_body_size 10m;
+
+    access_log /var/log/nginx/puppetmaster.access.log;
+    error_log /var/log/nginx/puppetmaster.error.log;
+
+    ssl_ciphers ECDH+AESGCM:ECDH+AES256:ECDH+AES128:DH+3DES:!ADH:!AECDH:!MD5;
+    ssl_prefer_server_ciphers on;
+    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+
+    location / {
+        proxy_pass http://puppetmaster;
+        include proxy_params;
+        proxy_set_header X-Client-Verify $ssl_client_verify;
+        proxy_set_header X-Client-DN $ssl_client_s_dn;
+        proxy_set_header X-SSL-Issuer $ssl_client_i_dn;
+    }
+}
