@@ -8,3 +8,5 @@ galaxy_info:
   - name: Debian
     versions:
     - jessie
+  categories:
+  - system
