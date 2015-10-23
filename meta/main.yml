@@ -10,3 +10,5 @@ galaxy_info:
     - jessie
   categories:
   - system
+dependencies:
+  - alxrem.puppetlabs-release

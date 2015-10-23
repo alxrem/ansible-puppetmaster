@@ -1,13 +1,4 @@
 ---
-- name: Detect Puppetlabs release package
-  command: dpkg-query -W puppetlabs-release
-  register: release_package
-  changed_when: not release_package.stdout.startswith("puppetlabs-release\t")
-
-- name: Download Puppetlabs release package
-  shell: "wget http://apt.puppetlabs.com/{{ puppet_release_pkg }} -O /tmp/{{ puppet_release_pkg }} && dpkg -i /tmp/{{ puppet_release_pkg }} && rm -f /tmp/{{ puppet_release_pkg }}"
-  when: release_package.changed
-
 - name: Create config directory
   file: path={{ conf_dir }} state=directory
 
