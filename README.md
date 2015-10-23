@@ -1,10 +1,20 @@
-# ansible-puppetmaster
+puppetmaster
+============
 
 Role installs and configures puppetmaster, unicorn and nginx.
 
 Role tested on debian/jessie.
 
-## Defaults
+Installs latest puppetmaster 3.x from the Puppetlabs repository.
+
+Replaces `/etc/defaults/unicorn` file. Saves logs of unicorn
+at `/var/log/puppet`.
+
+Creates nginx virtual server on port 8140. Stores configuration in
+`sites-enabled/puppetmaster`.
+
+Defaults
+--------
 
 ```yaml
 puppetmaster_server_name: puppet
@@ -13,7 +23,13 @@ unicorn_timeout: 30
 ```
 `puppetmaster_server_name` is used as the name of CA.
 
-## Example of playbook
+Dependencies
+------------
+
+- alxrem.puppetlabs-release
+
+Example Playbook
+----------------
 
 Role uses facts, so don't disable `gather_facts`.
 
@@ -28,12 +44,7 @@ Role uses facts, so don't disable `gather_facts`.
   - puppetmaster
 ```
 
-## Some details of configuration
+License
+-------
 
-Installs latest puppetmaster 3.x from the Puppetlabs repository.
-
-Replaces `/etc/defaults/unicorn` file. Saves logs of unicorn
-at `/var/log/puppet`.
-
-Creates nginx virtual server on port 8140. Stores configuration in
-`sites-enabled/puppetmaster`.
+GPL-3+
