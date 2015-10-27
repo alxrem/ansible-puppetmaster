@@ -1,4 +1,5 @@
 ---
 puppetmaster_server_name: puppet
+puppetmaster_use_puppetdb: false
 unicorn_worker_processes: 2
 unicorn_timeout: 30

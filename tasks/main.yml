@@ -11,6 +11,23 @@
   - nginx-light
   - puppetmaster
   - unicorn
+  notify: Restart nginx
+
+- name: Install puppetdb terminus
+  apt: name={{ item }} install_recommends=no
+  with_items:
+  - puppetdb-terminus
+  when: puppetmaster_use_puppetdb
+
+- name: Configure connection to puppetdb
+  template: src=puppetdb.conf.j2 dest={{ conf_dir }}/puppetdb.conf
+  notify: Reload unicorn
+  when: puppetmaster_use_puppetdb
+
+- name: Configure puppet routes
+  template: src=routes.yaml.j2 dest={{ conf_dir }}/routes.yaml
+  notify: Reload unicorn
+  when: puppetmaster_use_puppetdb
 
 - name: Configure rack
   copy: src=config.ru dest={{ lib_dir }}/config.ru

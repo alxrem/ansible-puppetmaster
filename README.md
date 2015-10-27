@@ -18,6 +18,7 @@ Defaults
 
 ```yaml
 puppetmaster_server_name: puppet
+puppetmaster_use_puppetdb: false
 unicorn_worker_processes: 2
 unicorn_timeout: 30
 ```
@@ -28,10 +29,13 @@ Dependencies
 
 - alxrem.puppetlabs-release
 
-Example Playbook
-----------------
+Example Playbooks
+-----------------
 
 Role uses facts, so don't disable `gather_facts`.
+
+If you want to configure puppet to use puppetdb installed on the same host,
+include puppetdb role after puppetmaster role.
 
 ```yaml
 ---
@@ -41,7 +45,19 @@ Role uses facts, so don't disable `gather_facts`.
     puppetmaster_server_name: puppet.example.org
     unicorn_worker_processes: 8
   roles:
-  - puppetmaster
+  - alxrem.puppetmaster
+```
+
+```yaml
+---
+- hosts: puppet.example.org
+  gather_facts: true
+  vars:
+    puppetmaster_server_name: puppet.example.org
+    puppetmaster_use_puppetdb: true
+  roles:
+  - alxrem.puppetmaster
+  - alxrem.puppetdb
 ```
 
 License

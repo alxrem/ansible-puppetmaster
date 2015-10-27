@@ -1,13 +1,17 @@
 [main]
-logdir=/var/log/puppet
-vardir=/var/lib/puppet
-ssldir=/var/lib/puppet/ssl
-rundir=/var/run/puppet
-factpath=$vardir/lib/facter
+logdir = /var/log/puppet
+vardir = /var/lib/puppet
+ssldir = /var/lib/puppet/ssl
+rundir = /var/run/puppet
+factpath = $vardir/lib/facter
 
 [master]
 ca_name = Puppet CA: {{ puppetmaster_server_name }}
 reports = log
+{% if puppetmaster_use_puppetdb %}
+storeconfigs = true
+storeconfigs_backend = puppetdb
+{% endif %}
 
 [agent]
 server = {{ puppetmaster_server_name }}
