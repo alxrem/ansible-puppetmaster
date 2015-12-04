@@ -1,3 +1,5 @@
+[![Ansible Galaxy](https://img.shields.io/ansible/role/5634.svg)](https://galaxy.ansible.com/detail#/role/5634)
+
 puppetmaster
 ============
 
