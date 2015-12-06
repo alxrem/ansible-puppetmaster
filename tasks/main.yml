@@ -41,6 +41,12 @@
   template: src=unicorn.conf.rb.j2 dest={{ unicorn_conf_file }}
   notify: Reload unicorn
 
+- name: Stop puppetmaster
+  service: name=puppetmaster state=stopped
+
+- name: Disable autostart of puppetmaster
+  copy: src=default dest=/etc/default/puppetmaster
+
 - meta: flush_handlers
 
 - name: Start unicorn
