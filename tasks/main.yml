@@ -35,7 +35,7 @@
 
 - name: Configure unicorn defaults
   template: src=unicorn.default.j2 dest=/etc/default/unicorn
-  notify: Reload unicorn
+  notify: Restart unicorn
 
 - name: Configure unicorn
   template: src=unicorn.conf.rb.j2 dest={{ unicorn_conf_file }}
